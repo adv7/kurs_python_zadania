@@ -31,7 +31,10 @@ def open_file_download_vins():
 
 def vin_checker(vins_list):
     for vin in vins_list:
-        if ((len(vin) != 17) | (vin.find("O") >= 0) | (vin.find("Q") >= 0) | (vin.find("I") >= 0) | (vin[13:16].isdigit() == False) | ((vin[8].isdecimal() == False) & (vin[8] != "X"))):
+        if ((len(vin) != 17) | (vin.find("O") >= 0) | (vin.find("Q") >= 0) | (vin.find("I") >= 0) | (vin[13:16].isdigit() == False)):
+            vin_status = False
+            vin_to_vin_with_status_replacer_in_vins_list(vin, vins_list, vin_status)
+        elif ((vin[8].isdecimal() == False) & (vin[8] != "X")):
             vin_status = False
             vin_to_vin_with_status_replacer_in_vins_list(vin, vins_list, vin_status)
         elif (counting_checksum(vin)):
