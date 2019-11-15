@@ -31,10 +31,10 @@ def open_file_download_vins():
 
 def vin_checker(vins_list):
     for vin in vins_list:
-        if ((len(vin) != 17) | (vin.find("O") >= 0) | (vin.find("Q") >= 0) | (vin.find("I") >= 0) | (vin[13:16].isdigit() == False)):
+        if ((len(vin) != 17) | (vin.find("O") >= 0) | (vin.find("Q") >= 0) | (vin.find("I") >= 0)):
             vin_status = False
             vin_to_vin_with_status_replacer_in_vins_list(vin, vins_list, vin_status)
-        elif ((vin[8].isdecimal() == False) & (vin[8] != "X")):
+        elif ((vin[8].isdecimal() == False) & (vin[8] != "X") | (vin[13:16].isdigit() == False)):
             vin_status = False
             vin_to_vin_with_status_replacer_in_vins_list(vin, vins_list, vin_status)
         elif (counting_checksum(vin)):
@@ -44,6 +44,20 @@ def vin_checker(vins_list):
             vin_status = False
             vin_to_vin_with_status_replacer_in_vins_list(vin, vins_list, vin_status)
     return vins_list
+
+
+def vin_to_vin_with_status_replacer_in_vins_list(vin, vins_list, status):
+    vin_with_status = vin_status_appender(vin, status)
+    vins_list[vins_list.index(vin)] = vin.replace(vin, vin_with_status)
+
+
+def vin_status_appender(vin, status):
+    if (status == True):
+        line = f"{vin} VALID"
+        return line
+    else:
+        line = f"{vin} INVALID"
+        return line
 
 
 def counting_checksum(vin):
@@ -67,20 +81,6 @@ def counting_checksum(vin):
         return True
     else:
         return False
-
-
-def vin_to_vin_with_status_replacer_in_vins_list(vin, vins_list, status):
-    vin_with_status = vin_status_appender(vin, status)
-    vins_list[vins_list.index(vin)] = vin.replace(vin, vin_with_status)
-
-
-def vin_status_appender(vin, status):
-    if (status == True):
-        line = f"{vin} VALID"
-        return line
-    else:
-        line = f"{vin} INVALID"
-        return line
 
 
 def return_file_conteins_vins_and_them_status(vins_list):
